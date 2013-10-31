@@ -23,10 +23,10 @@ int main()
 	client_sockfd = accept(server_sockfd, (struct sockaddr *)&client_address, &client_len);
 	while(1)
 	{
-		char inputString[100]; //пришедшая строка от клиента 
-		char path[100] = "/bin/";
+		char inputString[1000]; //пришедшая строка от клиента 
+		char path[1000] = "/bin/";
 
-		read(client_sockfd, inputString, 100); //принимает от клиента строку
+		read(client_sockfd, inputString, 1000); //принимает от клиента строку
 
 		char *commandString;
 		commandString = strtok(inputString, " "); // разбиваем строку на слова
@@ -41,16 +41,17 @@ int main()
 		printf("%s\n", path);
 		if (access(path, 0) == -1)
 		{
-	 		write(client_sockfd, "Command not found!", 100);
+	 		write(client_sockfd, "Command not found!", 1000);
 		}
 		else
 		{
 			if (fork() == 0)
 			{
-				execl(path, inputString, "-l", NULL);
+			    dup2(client_sockfd, 1);
+				execl(path, inputString, NULL);
 				exit(0);
 			}
-			write(client_sockfd, inputString, 100);
+			write(client_sockfd, inputString, 1000);
 		}
 	}
 	close(client_sockfd);

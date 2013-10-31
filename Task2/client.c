@@ -13,7 +13,7 @@ int main()
 	int len;
 	struct sockaddr_un address;
 	int result;
-	char inputString[100];
+	char inputString[1000];
 
 	sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
 	address.sun_family = AF_UNIX;
@@ -29,10 +29,11 @@ int main()
 	while(1)
 	{
 		printf("Input text: ");
-		cin.getline(inputString, 100);
+		cin.getline(inputString, 1000);
 
-		write(sockfd, inputString, 100);
-		read(sockfd, inputString, 100);
+		write(sockfd, inputString, 1000);
+		read(sockfd, inputString, 1000);
+		printf("%s\n", inputString);
 	}
 	close(sockfd);
 	exit(0);
