@@ -33,6 +33,7 @@ int main()
 
 		write(sockfd, inputString, 1000);
 		read(sockfd, inputString, 1000);
+
 		printf("%s\n", inputString);
 	}
 	close(sockfd);

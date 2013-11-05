@@ -31,11 +31,22 @@ int main()
 		char *commandString;
 		commandString = strtok(inputString, " "); // разбиваем строку на слова
 
+		char **tempArray = (char**)malloc(10 * sizeof(char*));
+		int size = 0;
 		while(commandString != NULL)
 		{
-			printf("%s\n", commandString);
+			tempArray[size] = commandString;
+			printf("%s\n", tempArray[size]);
 			commandString = strtok (NULL, " ");
+			size++;
 		}
+		while(size < 10)
+		{
+			tempArray[size] = NULL;
+			size++;
+		}
+
+		char *const argv[10] = {tempArray[0], tempArray[1], tempArray[2], tempArray[3], tempArray[4], tempArray[5], tempArray[6], tempArray[7]};
 
 		strcat(path, inputString);
 		printf("%s\n", path);
@@ -48,10 +59,9 @@ int main()
 			if (fork() == 0)
 			{
 			    dup2(client_sockfd, 1);
-				execl(path, inputString, NULL);
+				execv(path, argv);
 				exit(0);
 			}
-			write(client_sockfd, inputString, 1000);
 		}
 	}
 	close(client_sockfd);
